@@ -5,3 +5,9 @@ print(f"{sum} as type {type(sum)}")
 
 john = p1.say_hello("John" , "Pycon")
 print(john)
+
+# test check_reg
+print(p1.check_reg("reg_list.txt", "john"))
+print(p1.check_reg("reg_list.txt", "jane"))
+print(p1.check_reg("reg_list.txt", "adam"))
+print(p1.check_reg("reg_list.txt", "mary"))
