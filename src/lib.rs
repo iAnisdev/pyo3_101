@@ -1,5 +1,10 @@
 use pyo3::prelude::*;
 
+/// Say hello
+#[pyfunction]
+fn say_hello(name: String) -> PyResult<String> {
+    Ok(format!("Hello, {}!,  how are you today?", name))
+}
 /// Formats the sum of two numbers as string.
 #[pyfunction]
 fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
@@ -9,6 +14,7 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 /// A Python module implemented in Rust.
 #[pymodule]
 fn pyo3_101(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(say_hello, m)?)?;
     m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
     Ok(())
 }
