@@ -23,3 +23,17 @@ budget_dict = {
 "Judy": 540,
 }
 print(p1.travel_avg(budget_dict))
+
+# test Attendee
+print(f"Number of attendees are {p1.Attendee.cur_reg_num}")
+
+me = p1.Attendee('Cheuk', True)
+print(me.name, me.speaker, me.reg_num)
+print(f"Number of attendees are {p1.Attendee.cur_reg_num}")
+
+keynote = p1.Attendee('John', True)
+print(keynote.name, keynote.speaker, keynote.reg_num)
+keynote.name = 'Jon'
+print(keynote.name, keynote.speaker, keynote.reg_num)
+
+print(f"Number of attendees are {p1.Attendee.cur_reg_num}")

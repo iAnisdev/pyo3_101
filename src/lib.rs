@@ -1,7 +1,9 @@
 use pyo3::prelude::*;
+use pyo3::exceptions::PyFileNotFoundError;
+use pyo3::exceptions::PyValueError;
+use pyo3::types::PyType;
 use std::fs::File;
 use std::io::Read;
-use pyo3::exceptions::PyFileNotFoundError;
 use std::collections::HashMap;
 
 /// Say hello
@@ -52,6 +54,55 @@ fn travel_avg(budget_dict: HashMap<String, f32>) -> PyResult<f32> {
     }
     Ok(sum/count)
 }
+
+/// Class for all attendees.
+/// Class for all attendees.
+#[pyclass]
+struct Attendee {
+    #[pyo3(get)]
+    reg_num: u32,
+    name: String,
+    #[pyo3(get)]
+    speaker: bool,
+}
+
+#[pymethods]
+impl Attendee {
+    #[classattr]
+    fn cur_reg_num() -> u32 {
+        0
+    }
+    #[new]
+    #[classmethod]
+    fn new(cls: &Bound<'_, PyType>, name: String, speaker: bool) -> PyResult<Self> {
+        if name.len() == 0 {
+            Err(PyValueError::new_err("Please enter a name"))
+        } else {
+            let cur_reg_num: u32 = cls.getattr("cur_reg_num")?.extract()?;
+            cls.setattr("cur_reg_num", cur_reg_num + 1)?;
+            Ok(
+                Attendee{
+                    reg_num: cur_reg_num,
+                    name: name,
+                    speaker: speaker,
+                }
+            )
+        }
+    }
+    #[getter]
+    fn get_name(&self) -> PyResult<String> {
+        Ok(self.name.to_uppercase())
+    }
+    #[setter]
+    fn set_name(&mut self, name:String) -> PyResult<()> {
+        if name.len() == 0 {
+            Err(PyValueError::new_err("Please enter a name"))
+        } else {
+            self.name = name;
+            Ok(())
+        }
+    }
+}
 /// A Python module implemented in Rust.
 #[pymodule]
 fn pyo3_101(m: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -59,6 +110,7 @@ fn pyo3_101(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(check_reg, m)?)?;
     m.add_function(wrap_pyfunction!(count_att, m)?)?;
     m.add_function(wrap_pyfunction!(travel_avg, m)?)?;
+    m.add_class::<Attendee>()?;
     m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
     Ok(())
 }
