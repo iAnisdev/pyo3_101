@@ -2,6 +2,7 @@ use pyo3::prelude::*;
 use std::fs::File;
 use std::io::Read;
 use pyo3::exceptions::PyFileNotFoundError;
+use std::collections::HashMap;
 
 /// Say hello
 #[pyfunction]
@@ -33,11 +34,31 @@ fn check_reg(filename: String, name: String) -> PyResult<String> {
         },
     }
 }
+
+/// Give a list of attendee and count
+#[pyfunction]
+fn count_att(att_list: Vec<String>) -> PyResult<usize> {
+    Ok(att_list.len())
+}
+
+/// Give a dictionary of travel budgets and calculate average
+#[pyfunction]
+fn travel_avg(budget_dict: HashMap<String, f32>) -> PyResult<f32> {
+    let mut sum: f32 = 0.0;
+    let mut count: f32 = 0.0;
+    for (_, budget) in budget_dict {
+        sum = sum + budget;
+        count = count + 1.0;
+    }
+    Ok(sum/count)
+}
 /// A Python module implemented in Rust.
 #[pymodule]
 fn pyo3_101(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(say_hello, m)?)?;
     m.add_function(wrap_pyfunction!(check_reg, m)?)?;
+    m.add_function(wrap_pyfunction!(count_att, m)?)?;
+    m.add_function(wrap_pyfunction!(travel_avg, m)?)?;
     m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
     Ok(())
 }

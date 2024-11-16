@@ -13,4 +13,13 @@ print(p1.check_reg("reg_list.txt", "adam"))
 print(p1.check_reg("reg_list.txt", "mary"))
 
 # test check_reg with a non-existent file
-print(p1.check_reg("reg_list2.txt", "john"))
+# print(p1.check_reg("reg_list2.txt", "john"))
+
+# test count_att
+budget_dict = {
+"John": 850,
+"Susan": 790,
+"Peter":1030,
+"Judy": 540,
+}
+print(p1.travel_avg(budget_dict))
