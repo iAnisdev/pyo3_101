@@ -11,3 +11,6 @@ print(p1.check_reg("reg_list.txt", "john"))
 print(p1.check_reg("reg_list.txt", "jane"))
 print(p1.check_reg("reg_list.txt", "adam"))
 print(p1.check_reg("reg_list.txt", "mary"))
+
+# test check_reg with a non-existent file
+print(p1.check_reg("reg_list2.txt", "john"))

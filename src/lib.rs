@@ -1,6 +1,7 @@
 use pyo3::prelude::*;
 use std::fs::File;
 use std::io::Read;
+use pyo3::exceptions::PyFileNotFoundError;
 
 /// Say hello
 #[pyfunction]
@@ -16,13 +17,20 @@ fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
 /// Give are gistration list and check if name is in it
 #[pyfunction]
 fn check_reg(filename: String, name: String) -> PyResult<String> {
-    let mut file = File::open(filename).expect("File not exist");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    if contents.contains(&name) {
-        Ok("You are registered!".to_string())
-    } else {
-        Ok("Sorry you are not in our list!".to_string())
+    let file_result = File::open(filename);
+    match file_result {
+        Ok(mut file) => {
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            if contents.contains(&name) {
+                Ok("You are registered!".to_string())
+            } else {
+                Ok("Sorry you are not in our list!".to_string())
+            }
+        },
+        Err(_) => {
+            Err(PyFileNotFoundError::new_err("File not exist"))
+        },
     }
 }
 /// A Python module implemented in Rust.
