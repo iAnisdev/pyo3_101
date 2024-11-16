@@ -2,8 +2,8 @@ use pyo3::prelude::*;
 
 /// Say hello
 #[pyfunction]
-fn say_hello(name: String) -> PyResult<String> {
-    Ok(format!("Hello, {}!,  how are you today?", name))
+fn say_hello(name: String, conf: String) -> PyResult<String> {
+    Ok(format!("Hello, {}!, Welcome to {}", name, conf))
 }
 /// Formats the sum of two numbers as string.
 #[pyfunction]
